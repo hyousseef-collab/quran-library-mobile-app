@@ -4,63 +4,101 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0f3d2e" />
-  <meta name="description" content="المكتبة القرآنية برواية ورش عن نافع - سور وأذكار واستماع صوتي" />
+  <meta name="description" content="المكتبة القرآنية - سور، أذكار، والاستماع الصوتي برواية ورش" />
   <title>المكتبة القرآنية | رواية ورش</title>
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="apple-touch-icon" href="icons/icon-192.svg" />
+  <link rel="icon" href="icons/icon-192.svg" type="image/svg+xml" />
   <style>
-    :root{
-      --bg-1:#0f3d2e;
-      --bg-2:#1a5c45;
-      --gold:#c9a227;
-      --gold-soft:#f0d78c;
-      --glass: rgba(255,255,255,0.08);
+    :root {
+      --bg1: #0f3d2e;
+      --bg2: #1a5c45;
+      --gold: #c9a227;
+      --gold-soft: #f0d78c;
+      --glass: rgba(255,255,255,0.06);
       --glass-strong: rgba(255,255,255,0.12);
-      --border: rgba(201,162,39,0.3);
-      --text:#f9f1d7;
-      --muted:#dfe7d5;
-      --danger:#ff6b6b;
-      --success:#57d28b;
-      --shadow: rgba(0,0,0,0.4);
+      --border: rgba(201,162,39,0.35);
+      --text: #f9f1d7;
+      --muted: #dfe7d5;
+      --success: #57d28b;
+      --shadow: rgba(0,0,0,0.38);
       --radius: 18px;
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
     html, body {
       margin: 0;
-      height: 100%;
-      overflow-x: hidden;
-      background: linear-gradient(135deg, var(--bg-1), var(--bg-2), var(--bg-1));
+      min-height: 100%;
+      background: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 50%, var(--bg1) 100%);
       color: var(--text);
       font-family: 'Cairo', 'Tahoma', sans-serif;
+      overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
       scroll-behavior: smooth;
     }
-
     body {
       padding-top: max(12px, env(safe-area-inset-top));
-      padding-bottom: calc(110px + env(safe-area-inset-bottom));
+      padding-bottom: calc(100px + env(safe-area-inset-bottom));
     }
 
     a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
 
-    .skip-link {
-      position: absolute;
-      right: 16px;
-      top: 16px;
-      background: white;
-      color: var(--bg-1);
-      padding: 8px 12px;
-      border-radius: 10px;
-      z-index: 2000;
-      transform: translateY(-200%);
-      transition: transform 0.2s ease;
-      font-weight: 700;
+    .splash {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(15,61,46,0.96), rgba(26,92,69,0.97));
+      transition: opacity 0.45s ease, visibility 0.45s ease;
     }
-
-    .skip-link:focus { transform: translateY(0); }
+    .splash.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .splash-card {
+      text-align: center;
+      padding: 28px 22px 18px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      box-shadow: 0 18px 38px rgba(0,0,0,0.28);
+    }
+    .splash-logo {
+      width: 96px;
+      height: 96px;
+      margin: 0 auto 10px;
+      background: linear-gradient(135deg, #0f3d2e, #1a5c45);
+      border-radius: 26px;
+      display: grid;
+      place-items: center;
+      border: 2px solid rgba(240,215,140,0.7);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.28);
+    }
+    .splash-logo svg { width: 62px; height: 62px; }
+    .splash-title {
+      color: var(--gold-soft);
+      font-size: 1.65rem;
+      font-family: 'Amiri', 'Tahoma', serif;
+      margin: 6px 0 4px;
+    }
+    .splash-sub {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+    }
+    .spinner {
+      width: 36px;
+      height: 36px;
+      margin: 0 auto;
+      border: 3px solid rgba(255,255,255,0.2);
+      border-top-color: var(--gold-soft);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     .header {
       position: relative;
@@ -68,49 +106,75 @@
       border-bottom: 3px solid var(--gold);
       box-shadow: 0 8px 24px rgba(0,0,0,0.18);
       text-align: center;
-      padding: 26px 18px 18px;
+      padding: 26px 18px 22px;
     }
-
     .header .flag {
       position: absolute;
       left: 18px;
       top: 18px;
       font-size: 2rem;
+      opacity: 0.9;
       user-select: none;
-      opacity: 0.8;
     }
-
     .header h1 {
       margin: 0;
-      font-size: clamp(1.7rem, 3vw, 2.5rem);
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
       color: var(--gold-soft);
       font-family: 'Amiri', 'Tahoma', serif;
-      font-weight: 700;
-      line-height: 1.3;
+      line-height: 1.25;
     }
-
     .header .sub-title {
       margin-top: 4px;
       color: var(--gold);
       font-weight: 700;
       font-size: 0.95rem;
     }
-
     .header .dedication {
       margin-top: 8px;
       color: var(--muted);
       font-size: 0.95rem;
-      font-weight: 600;
     }
-
     .header .name {
       margin-top: 4px;
       font-size: clamp(1.1rem, 2vw, 1.5rem);
       font-weight: 800;
-      color: white;
+      color: #fff;
     }
 
-    .container { width: min(1120px, calc(100% - 22px)); margin: 18px auto 0; }
+    .container {
+      width: min(1120px, calc(100% - 22px));
+      margin: 18px auto 0;
+    }
+
+    .install-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(240,215,140,0.28);
+      padding: 12px 14px;
+      border-radius: 14px;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .install-banner.hidden { display: none; }
+    .install-banner .text {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    .install-btn {
+      appearance: none;
+      border: none;
+      border-radius: 12px;
+      background: var(--gold);
+      color: var(--bg1);
+      font-weight: 800;
+      padding: 10px 14px;
+      cursor: pointer;
+      min-width: 110px;
+    }
 
     .nav-tabs {
       display: flex;
@@ -119,7 +183,6 @@
       gap: 8px;
       margin-bottom: 18px;
     }
-
     .nav-tabs button {
       appearance: none;
       border: 1px solid var(--border);
@@ -128,18 +191,13 @@
       padding: 10px 18px;
       border-radius: 999px;
       cursor: pointer;
-      font-size: 0.95rem;
-      font-family: inherit;
       font-weight: 700;
-      transition: all 0.22s ease;
+      transition: all 0.2s ease;
     }
-
     .nav-tabs button:hover,
     .nav-tabs button.active {
       background: var(--gold);
-      color: var(--bg-1);
-      border-color: transparent;
-      transform: translateY(-1px);
+      color: var(--bg1);
       box-shadow: 0 8px 18px rgba(201,162,39,0.25);
     }
 
@@ -152,12 +210,7 @@
       backdrop-filter: blur(10px);
       box-shadow: 0 10px 28px rgba(0,0,0,0.18);
     }
-
-    .section.active {
-      display: block;
-      animation: fadeIn 0.28s ease;
-    }
-
+    .section.active { display: block; animation: fadeIn 0.28s ease; }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
@@ -166,30 +219,24 @@
     h2 {
       margin: 0 0 16px;
       text-align: center;
-      font-size: clamp(1.4rem, 2vw, 2rem);
+      font-size: clamp(1.5rem, 2.5vw, 2rem);
       color: var(--gold-soft);
       font-family: 'Amiri', 'Tahoma', serif;
       border-bottom: 2px solid rgba(201,162,39,0.35);
       padding-bottom: 10px;
     }
 
-    .controls {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 12px;
-    }
-
+    .controls { display: flex; justify-content: center; margin-bottom: 12px; }
     .search {
       width: min(100%, 460px);
       display: flex;
       align-items: center;
       gap: 8px;
       background: rgba(0,0,0,0.2);
-      border-radius: 14px;
       border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
       padding: 4px 8px;
     }
-
     .search input[type="search"] {
       flex: 1;
       background: transparent;
@@ -197,13 +244,10 @@
       color: white;
       padding: 12px 10px;
       font-size: 0.95rem;
-      font-family: inherit;
       outline: none;
       direction: rtl;
     }
-
-    .search input::placeholder { color: rgba(255,255,255,0.65); }
-
+    .search input::placeholder { color: rgba(255,255,255,0.7); }
     .search button {
       appearance: none;
       border: none;
@@ -211,9 +255,8 @@
       color: white;
       border-radius: 10px;
       padding: 10px 14px;
-      font-family: inherit;
-      font-weight: 700;
       cursor: pointer;
+      font-weight: 700;
     }
 
     .muted-small {
@@ -231,7 +274,6 @@
       overflow-y: auto;
       padding: 4px;
     }
-
     .surah-item {
       background: rgba(0,0,0,0.22);
       border: 1px solid transparent;
@@ -239,35 +281,30 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 8px;
       padding: 12px 10px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
       user-select: none;
     }
-
     .surah-item:hover {
       border-color: var(--gold);
       background: rgba(201,162,39,0.12);
       transform: translateY(-1px);
     }
-
     .surah-item:active { transform: scale(0.98); }
-
     .surah-item .number {
       width: 28px;
       height: 28px;
       border-radius: 50%;
       background: var(--gold);
-      color: var(--bg-1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      color: var(--bg1);
+      display: grid;
+      place-items: center;
       font-weight: 900;
       font-size: 0.85rem;
       flex-shrink: 0;
     }
-
     .surah-item .title {
       font-weight: 700;
       color: white;
@@ -275,7 +312,6 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      text-align: center;
       direction: rtl;
     }
 
@@ -284,18 +320,16 @@
       background: rgba(0,0,0,0.2);
       border: 1px solid rgba(255,255,255,0.08);
       border-radius: 16px;
-      color: white;
       padding: 18px 16px;
       min-height: 240px;
       direction: rtl;
       line-height: 2.2;
-      font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+      font-size: clamp(1.2rem, 2vw, 1.6rem);
       font-family: 'Amiri', 'Tahoma', serif;
       text-align: center;
-      overflow-y: auto;
       max-height: 52vh;
+      overflow-y: auto;
     }
-
     .loading-state { color: var(--gold-soft); font-weight: 700; }
 
     .audio-box {
@@ -305,17 +339,14 @@
       padding: 18px 14px;
       margin-bottom: 14px;
     }
-
     .audio-grid {
       display: grid;
-      grid-template-columns: 1fr;
       gap: 14px;
+      grid-template-columns: 1fr;
     }
-
-    @media (min-width: 700px) {
+    @media (min-width: 760px) {
       .audio-grid { grid-template-columns: 1fr 1fr; }
     }
-
     .audio-group label {
       display: block;
       margin-bottom: 8px;
@@ -323,7 +354,6 @@
       font-weight: 700;
       font-size: 0.9rem;
     }
-
     .audio-group select {
       width: 100%;
       border: 1px solid rgba(255,255,255,0.12);
@@ -331,55 +361,42 @@
       color: white;
       padding: 12px 14px;
       border-radius: 12px;
-      font-family: inherit;
-      font-size: 0.95rem;
       outline: none;
     }
-
-    .audio-group select option { background: var(--bg-1); color: white; }
+    .audio-group option { background: var(--bg1); color: white; }
 
     .listen-action-btn {
       width: 100%;
       margin-top: 16px;
       appearance: none;
-      background: var(--gold);
-      color: var(--bg-1);
       border: none;
       border-radius: 12px;
+      background: var(--gold);
+      color: var(--bg1);
       padding: 14px 18px;
-      font-size: 1rem;
       font-weight: 800;
       cursor: pointer;
-      font-family: inherit;
-      transition: opacity 0.2s ease;
     }
 
-    .listen-action-btn:active { opacity: 0.82; }
-
-    .adhkar-category-filter {
+    .adhkar-filter {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
       gap: 8px;
       margin-bottom: 16px;
     }
-
     .category-btn {
       background: rgba(255,255,255,0.06);
-      color: var(--gold);
       border: 1px solid var(--border);
-      padding: 8px 13px;
+      color: var(--gold);
       border-radius: 999px;
-      font-family: inherit;
-      font-size: 0.88rem;
-      font-weight: 700;
+      padding: 8px 13px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      font-weight: 700;
     }
-
     .category-btn.active {
       background: var(--gold);
-      color: var(--bg-1);
+      color: var(--bg1);
       border-color: transparent;
     }
 
@@ -391,11 +408,9 @@
       overflow-y: auto;
       padding: 4px;
     }
-
     @media (min-width: 700px) {
       .adhkar-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
     }
-
     .adhkar-item {
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.06);
@@ -404,43 +419,34 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      cursor: pointer;
-      transition: all 0.2s ease;
       min-height: 170px;
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease;
     }
-
-    .adhkar-item:hover { border-color: rgba(201,162,39,0.4); transform: translateY(-1px); }
-    .adhkar-item.completed { opacity: 0.55; border-color: rgba(87,210,139,0.8); }
-
+    .adhkar-item:hover { border-color: rgba(201,162,39,0.45); transform: translateY(-1px); }
+    .adhkar-item.completed { opacity: 0.55; border-color: rgba(87,210,139,0.7); }
     .adhkar-item h3 {
       margin: 0 0 8px;
       color: var(--gold-soft);
       font-family: 'Amiri', 'Tahoma', serif;
-      font-size: 1.3rem;
+      font-size: 1.32rem;
     }
-
     .adhkar-text {
       margin: 0;
       color: white;
-      line-height: 1.9;
       direction: rtl;
       text-align: right;
+      line-height: 1.9;
       font-size: 0.96rem;
     }
-
     .adhkar-footer {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-top: 14px;
+      justify-content: space-between;
       gap: 10px;
+      margin-top: 14px;
     }
-
-    .meta {
-      color: var(--muted);
-      font-size: 0.78rem;
-    }
-
+    .meta { color: var(--muted); font-size: 0.78rem; }
     .count-badge {
       background: rgba(201,162,39,0.12);
       border: 1px solid rgba(201,162,39,0.18);
@@ -458,16 +464,15 @@
       text-align: right;
       padding: 8px 6px;
     }
-
     .about ul { margin: 10px 16px 0 0; padding: 0; }
     .about li { margin-bottom: 8px; }
 
     footer {
+      margin-top: 22px;
       text-align: center;
       color: var(--muted);
       font-size: 0.85rem;
-      margin-top: 22px;
-      padding-bottom: 8px;
+      padding-bottom: 12px;
     }
 
     .sticky-player {
@@ -478,11 +483,10 @@
       background: rgba(12, 51, 38, 0.98);
       border-top: 2px solid var(--gold);
       backdrop-filter: blur(12px);
-      box-shadow: 0 -8px 28px rgba(0,0,0,0.38);
-      z-index: 9999;
+      box-shadow: 0 -8px 26px rgba(0,0,0,0.38);
+      z-index: 9998;
       padding: 8px 14px calc(8px + env(safe-area-inset-bottom));
     }
-
     .player-inner {
       max-width: 1100px;
       margin: 0 auto;
@@ -490,19 +494,16 @@
       flex-direction: column;
       gap: 6px;
     }
-
     .player-top {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      font-size: 0.8rem;
+      align-items: center;
       color: var(--muted);
+      font-size: 0.78rem;
       gap: 12px;
       padding: 0 4px;
     }
-
     .status-on { color: var(--success); font-weight: 800; }
-
     audio {
       width: 100%;
       height: 38px;
@@ -511,23 +512,31 @@
     }
 
     @media (max-width: 480px) {
-      .header { padding-top: 24px; }
-      .header .flag {
-        position: static;
-        display: inline-block;
-        margin-bottom: 4px;
-      }
-
-      .search {
+      .header .flag { display: inline-block; position: static; margin-bottom: 5px; }
+      .search { flex-direction: column; align-items: stretch; }
+      .search button { width: 100%; }
+      .install-banner {
         flex-direction: column;
         align-items: stretch;
       }
-
-      .search button { width: 100%; }
     }
   </style>
 </head>
 <body>
+  <div class="splash" id="splash">
+    <div class="splash-card">
+      <div class="splash-logo" aria-hidden="true">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="36" fill="none" stroke="#f0d78c" stroke-width="4"/>
+          <path d="M50 18c-8 18-24 32-42 38 18 6 34 20 42 38 8-18 24-32 42-38-18-6-34-20-42-38Z" fill="#f0d78c" opacity="0.96"/>
+        </svg>
+      </div>
+      <div class="splash-title">المكتبة القرآنية</div>
+      <div class="splash-sub">رواية ورش عن نافع</div>
+      <div class="spinner" aria-label="جاري التحميل"></div>
+    </div>
+  </div>
+
   <a class="skip-link" href="#quran-display">تخطي إلى المحتوى</a>
 
   <header class="header" role="banner">
@@ -539,6 +548,11 @@
   </header>
 
   <main class="container" role="main">
+    <div id="installBanner" class="install-banner hidden">
+      <div class="text">تثبيت التطبيق على الشاشة الرئيسية لسهولة الوصول</div>
+      <button type="button" class="install-btn" id="installBtn">تثبيت</button>
+    </div>
+
     <nav class="nav-tabs" role="tablist" aria-label="قائمة الأقسام">
       <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="quran-section" id="tab-quran">القرآن (ورش)</button>
       <button class="tab-btn" role="tab" aria-selected="false" aria-controls="audio-section" id="tab-audio">التلاوة الصوتية</button>
@@ -593,7 +607,7 @@
     <section id="adhkar-section" class="section" role="tabpanel" aria-labelledby="tab-adhkar" hidden>
       <h2>الأذكار</h2>
 
-      <div class="adhkar-category-filter">
+      <div class="adhkar-filter">
         <button type="button" class="category-btn active" data-category="all">الكل</button>
         <button type="button" class="category-btn" data-category="morning">الصباح</button>
         <button type="button" class="category-btn" data-category="evening">المساء</button>
@@ -608,13 +622,12 @@
     <section id="about-section" class="section" role="tabpanel" aria-labelledby="tab-about" hidden>
       <h2>عن المشروع</h2>
       <div class="about">
-        هذا التطبيق تم تصميمه ليكون منصة قرآنية خفيفة وسريعة ومناسبة للهواتف المحمولة، هدفه نشر العلم والذكر بالصورة العملية، مع توفير:
+        هذا التطبيق تم تصميمه ليكون منصة قرآنية خفيفة وسريعة ومناسبة للهواتف المحمولة، بهدف نشر العلم والذكر في صورة عملية وسهلة. يوفر التطبيق:
         <ul>
-          <li>سور القرآن برواية ورش عن نافع.</li>
-          <li>تصفح سريع وسهل داخل شاشة الهاتف.</li>
-          <li>استماع صوتي مباشر من مصادر موثوقة.</li>
-          <li>أذكار وأدعية مع قابلية تسجيل العدّ.</li>
-          <li>تصميم متجاوب يعمل على Android و iPhone.</li>
+          <li>سور القرآن الكريم برواية ورش عن نافع</li>
+          <li>استماع مباشر إلى التلاوات الصوتية</li>
+          <li>أذكار وأدعية مع إمكانية تسجيل العدّ</li>
+          <li>واجهة متجاوبة تناسب Android و iPhone</li>
         </ul>
       </div>
     </section>
@@ -689,8 +702,18 @@
     const playerStatus = document.getElementById("player-status");
     const adhkarGrid = document.getElementById("adhkar-grid");
     const tabs = document.querySelectorAll(".tab-btn");
+    const installBanner = document.getElementById("installBanner");
+    const installBtn = document.getElementById("installBtn");
+    const splash = document.getElementById("splash");
 
     let mp3Reciters = [];
+    let deferredPrompt = null;
+
+    function hideSplash() {
+      setTimeout(() => {
+        splash.classList.add("hidden");
+      }, 700);
+    }
 
     function renderSurahList(filterText = "") {
       const q = filterText.trim().toLowerCase();
@@ -758,7 +781,9 @@
 
         const data = await response.json();
         if (data && Array.isArray(data.reciters)) {
-          mp3Reciters = data.reciters.filter(reciter => reciter.moshaf && reciter.moshaf.some(m => /ورش|warsh/i.test(m.name || "")));
+          mp3Reciters = data.reciters.filter(reciter =>
+            reciter.moshaf && reciter.moshaf.some(m => /ورش|warsh/i.test(m.name || ""))
+          );
 
           if (!mp3Reciters.length) {
             audioReciterSelect.innerHTML = '<option value="">لا توجد رواية ورش متاحة</option>';
@@ -826,7 +851,7 @@
       mainAudio.src = url;
       mainAudio.load();
       mainAudio.play().catch(() => {
-        alert("لا يمكن التشغيل تلقائياً الآن، انقر على المشغل لتفعيل الصوت.");
+        alert("لا يمكن التشغيل تلقائياً الآن. اضغط على مشغل الصوت لتفعيل الصوت يدويًا.");
       });
     }
 
@@ -834,7 +859,6 @@
       playerStatus.textContent = "يعمل الآن";
       playerStatus.className = "status-on";
     });
-
     mainAudio.addEventListener("pause", () => {
       playerStatus.textContent = "متوقف";
       playerStatus.className = "";
@@ -861,7 +885,6 @@
         card.addEventListener("click", () => {
           const countValueEl = card.querySelector(".count-value");
           let count = Number(countValueEl.textContent);
-
           if (count > 0) {
             count--;
             countValueEl.textContent = count;
@@ -872,14 +895,6 @@
         adhkarGrid.appendChild(card);
       });
     }
-
-    document.querySelectorAll(".category-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".category-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        renderAdhkar(btn.dataset.category);
-      });
-    });
 
     tabs.forEach(tab => {
       tab.addEventListener("click", () => {
@@ -899,9 +914,20 @@
         Object.entries(sections).forEach(([id, section]) => {
           const show = id === tab.id;
           section.classList.toggle("active", show);
-          if (show) section.removeAttribute("hidden");
-          else section.setAttribute("hidden", "hidden");
+          if (show) {
+            section.removeAttribute("hidden");
+          } else {
+            section.setAttribute("hidden", "hidden");
+          }
         });
+      });
+    });
+
+    document.querySelectorAll(".category-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".category-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        renderAdhkar(btn.dataset.category);
       });
     });
 
@@ -917,12 +943,28 @@
     renderSurahList("");
     renderAdhkar("all");
     loadReciters();
+    hideSplash();
 
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker.register("./sw.js").catch(() => {});
       });
     }
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBanner.classList.remove("hidden");
+    });
+
+    installBtn.addEventListener("click", async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(outcome);
+      deferredPrompt = null;
+      installBanner.classList.add("hidden");
+    });
   </script>
 </body>
 </html>
