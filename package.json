@@ -1,0 +1,21 @@
+{
+  "name": "quran-library-mobile-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "المكتبة القرآنية الشاملة برواية ورش - نسخة PWA/Capacitor",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "sync": "npx cap sync",
+    "android": "npx cap open android",
+    "ios": "npx cap open ios",
+    "prepare": "npx cap sync"
+  },
+  "dependencies": {
+    "@capacitor/core": "^6.1.2",
+    "@capacitor/cli": "^6.1.2"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/ios": "^6.1.2"
+  }
+}
